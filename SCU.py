@@ -11,6 +11,7 @@ while True:
 
     opcao = input('Digite uma opção: ')
 
+    # Cadastrar Usuário
     if opcao == '1':
         
         while True:
@@ -52,7 +53,7 @@ while True:
         usuario_id += 1
 
         
-    
+    # Listar usuário
     elif opcao == '2':
         if len(usuarios) == 0:
             print('Sem usuários cadastrados')
@@ -61,34 +62,47 @@ while True:
                 print(f'id: {usuario["id"]} | nome: {usuario["nome"]} | email: {usuario["email"]}')
 
 
+    #Atualizar Usuário
     elif opcao == '3':
 
-        while True:
+        # Encontrar Usuário por id
+        id_digitado = int(input('Digite o id: '))
 
-            id_digitado = int(input('Digite um ID: '))
+        id_encontrado = False
 
-            for usuario in usuarios:
-                if id_digitado == usuario['id']:
+        for usuario in usuarios:
+            if id_digitado == usuario['id']:
+                id_encontrado = True
 
-                    novo_nome_usuario = input('Digite um novo usuário: ')
-                    novo_email_usuario = input('Digite um novo email para o usuário: ')
-
-                    usuario_nome = novo_nome_usuario
-                    usuario_email = novo_email_usuario
-
-                else:
-                    print('id não encontrado')
-                    break    
-
-                    
-
+                # Validação Nome
+                while True:
+                    novo_nome = input('Digite o novo nome: ').strip()
+                    if len(novo_nome) == 0:
+                        print('Nome inválido!')
+                    else:
+                        break
                 
+                # Validação E-mail
+                while True:
+                    novo_email =  input('Digite o novo e-mail: ').strip()
+                    if len(novo_email) == 0:
+                        print('E-mail inválido!')
+                    else:
+                        break
+
+        if id_encontrado:
+            print('Usuário encontrado')
+        else:
+            print('id não encontrado')
 
 
 
 
+            
 
+            
 
+    # Deletar Usuário
     elif opcao == '4':
         print('Usuário deletado com sucesso!')
 
