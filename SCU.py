@@ -65,38 +65,19 @@ while True:
     #Atualizar Usuário
     elif opcao == '3':
 
-        # Encontrar Usuário por id
-        id_digitado = int(input('Digite o id: '))
+        id_digitado = int(input('Digite um id: '))
 
-        id_encontrado = False
+        usuario_encontrado = None
 
         for usuario in usuarios:
             if id_digitado == usuario['id']:
-                id_encontrado = True
-
-                # Validação Nome
-                while True:
-                    novo_nome = input('Digite o novo nome: ').strip()
-                    if len(novo_nome) == 0:
-                        print('Nome inválido!')
-                    else:
-                        break
-                
-                # Validação E-mail
-                while True:
-                    novo_email =  input('Digite o novo e-mail: ').strip()
-                    if len(novo_email) == 0:
-                        print('E-mail inválido!')
-                    else:
-                        break
-
-        if id_encontrado:
-            print('Usuário encontrado')
+                usuario_encontrado = usuario
+                break
+        
+        if usuario_encontrado:
+            print('Usuario encontrado')
         else:
-            print('id não encontrado')
-
-
-
+            print('Usuário não encontrado')
 
             
 
