@@ -65,8 +65,15 @@ while True:
     #Atualizar Usuário
     elif opcao == '3':
 
-        id_digitado = int(input('Digite um id: '))
+        # Validação do ID
+        while True:
 
+            try:
+                id_digitado = int(input('Digite um id: '))
+                break
+            except ValueError:
+                print('Digite um número válido!')
+                
         usuario_encontrado = None
 
         for usuario in usuarios:
@@ -74,12 +81,51 @@ while True:
                 usuario_encontrado = usuario
                 break
         
+        
         if usuario_encontrado:
-            print('Usuario encontrado')
-        else:
-            print('Usuário não encontrado')
 
+            # Validação do Nome
+            while True:
+                
+                novo_nome_usuario = input('Digite seu novo nome de usuário: ')
+
+                if len(novo_nome_usuario) == 0:
+                    print('Nome de usuário inválido. DIgite novamente!')
+                else:
+                    break
             
+            # Validação do email
+            while True:
+                
+                novo_email_usuario = input('Digite su novo e-mail:')
+
+                if len(novo_email_usuario) == 0:
+                    print('E-mail inválido. Tente novamente!')
+                    continue
+
+                
+                email_duplicado = False
+
+
+                for usuario in usuarios:
+                    if usuario['email'] == novo_email_usuario and usuario['id'] != usuario_encontrado['id']:
+                        email_duplicado = True
+                        break
+                
+
+                if email_duplicado:
+                    print('E-mail já cadastrado!')
+                else:
+                    break
+
+            # Atualização dos dados do usuário
+            usuario_encontrado['nome'] = novo_nome_usuario
+            usuario_encontrado['email'] = novo_email_usuario
+
+            print('Usuário atualizado com sucesso!')
+        
+        else:
+            print('Usuário não encontrado!')
 
             
 
