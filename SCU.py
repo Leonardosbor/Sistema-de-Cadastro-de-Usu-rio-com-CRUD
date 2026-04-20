@@ -1,4 +1,10 @@
-usuarios = []
+try:
+    with open('usuarios.json', 'r') as arquivo:
+except:
+    usuarios = []
+    
+
+
 usuario_id = 1
 
 while True:
@@ -131,7 +137,32 @@ while True:
 
     # Deletar Usuário
     elif opcao == '4':
-        print('Usuário deletado com sucesso!')
+
+        while True:
+
+            try:
+                usuario_digitado = int(input('Digite o id do usuário: '))
+                break
+            except ValueError:
+                print('Digite um número válido')
+                continue
+
+        usuario_encontrado = None
+
+        for usuario in usuarios:
+            if usuario['id'] == usuario_digitado:
+                usuario_encontrado = usuario
+                break
+                
+
+        if usuario_encontrado:
+            usuarios.remove(usuario_encontrado)
+            print('Usuário removido com sucesso!') 
+            
+        else:
+            print('Usuário não encontrado')
+
+        
 
     elif opcao == '5':
         print('Saindo...')
