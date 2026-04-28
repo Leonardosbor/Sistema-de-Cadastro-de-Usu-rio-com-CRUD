@@ -11,25 +11,18 @@ def salvar_usuarios(usuarios):
     with open ('usuarios.json', 'w') as arquivo:
         json.dump(usuarios, arquivo)
 
+
+# Permite que o id continue correto após carregar JSON
+if usuarios:
+    usuario_id = max(u['id'] for u in usuarios) + 1
+else:
+    usuario_id = 1
+
+
+# Função para cadastrar usuários - Opção 1
+def cadastrar_usuario(usuarios, usuario_id):
     
-
-
-usuario_id = 1
-
-while True:
-
-    print('1 - Cadastrar uruário')
-    print('2 - Listar usuário')
-    print('3 - Atualizar Usuário')
-    print('4 - Deletar Usuário')
-    print('5 - Sair')
-
-    opcao = input('Digite uma opção: ')
-
-    # Cadastrar Usuário
-    if opcao == '1':
-        
-        while True:
+    while True:
             usuario_nome = input('Digite seu usuário: ').strip()
 
             if len(usuario_nome) == 0:
@@ -37,8 +30,8 @@ while True:
             else:
                 break
         
-        while True:
-            usuario_email = input('Digite seu e-mail: ').strip()
+    while True:
+            usuario_email = input('Digite seu e-mail: ').strip().lower()
 
             if len(usuario_email) == 0:
                 print('Campo vazio. Digite seu e-mail corretamente!')
@@ -57,135 +50,149 @@ while True:
             else:
                 break
                 
-        usuario = {
-            'id': usuario_id,
-            'nome': usuario_nome,
-            'email': usuario_email
-        }
+    usuario = {
+        'id': usuario_id,
+        'nome': usuario_nome,
+        'email': usuario_email
+    }
 
-        usuarios.append(usuario)
-        print('Usuário cadastrado com sucesso!')
-        usuario_id += 1
-        salvar_usuarios(usuarios)
-
-        
-    # Listar usuário
-    elif opcao == '2':
-        if not usuarios:
-            print('Sem usuários cadastrados')
-        else:
-            for usuario in usuarios:
-                print(f'id: {usuario["id"]} | nome: {usuario["nome"]} | email: {usuario["email"]}')
-
-        
+    usuarios.append(usuario)
+    print('Usuário cadastrado com sucesso!')
+    usuario_id += 1
+    
+    salvar_usuarios(usuarios)
+    
+    return usuario_id
 
 
-    #Atualizar Usuário
-    elif opcao == '3':
-
-        # Validação do ID
-        while True:
-
-            try:
-                id_digitado = int(input('Digite um id: '))
-                break
-            except ValueError:
-                print('Digite um número válido!')
-                
-        usuario_encontrado = None
-
+# Função para listar usuários - Opção 2
+def listar_usuarios(usuarios):
+    if not usuarios:
+        print('Sem usuários cadastrados')
+    else:
         for usuario in usuarios:
-            if id_digitado == usuario['id']:
-                usuario_encontrado = usuario
-                break
+            print(f'id: {usuario["id"]} | nome: {usuario["nome"]} | email: {usuario["email"]}')
+
+
+
+# Função para atualizar usuários - Opção 3
+def atualizar_usuarios(usuarios):
+    while True:
+        try:
+            id_digitado = int(input('Digite um id: '))
+            break
+        except ValueError:
+            print('Digite um número válido!')
+                
+    usuario_encontrado = None
+
+    for usuario in usuarios:
+        if id_digitado == usuario['id']:
+            usuario_encontrado = usuario
+            break
+    
+
+    if usuario_encontrado:
         
-        
-        if usuario_encontrado:
-
-            # Validação do Nome
-            while True:
-                
-                novo_nome_usuario = input('Digite seu novo nome de usuário: ').strip()
-
-                if len(novo_nome_usuario) == 0:
-                    print('Nome de usuário inválido. DIgite novamente!')
-                else:
-                    break
-                
-            
-            # Validação do email
-            while True:
-                
-                novo_email_usuario = input('Digite seu novo e-mail:').strip()
-
-                if len(novo_email_usuario) == 0:
-                    print('E-mail inválido. Tente novamente!')
-                    continue
-
-                
-                email_duplicado = False
-
-
-                for usuario in usuarios:
-                    if usuario['email'] == novo_email_usuario and usuario['id'] != usuario_encontrado['id']:
-                        email_duplicado = True
-                        break
-                
-
-                if email_duplicado:
-                    print('E-mail já cadastrado!')
-                else:
-                    break
-
-            # Atualização dos dados do usuário
-            usuario_encontrado['nome'] = novo_nome_usuario
-            usuario_encontrado['email'] = novo_email_usuario
-
-            print('Usuário atualizado com sucesso!')
-            
-            salvar_usuarios(usuarios)
-        
-        else:
-            print('Usuário não encontrado!')
-
-        
-
-            
-
-    # Deletar Usuário
-    elif opcao == '4':
-
+        # Validação de nome
         while True:
+            novo_nome_usuario = input('Digite seu novo nome de usuário: ').strip()
 
-            try:
-                usuario_digitado = int(input('Digite o id do usuário: '))
+            if len(novo_nome_usuario) == 0:
+                print('Nome de usuário inválido. DIgite novamente!')
+            else:
                 break
-            except ValueError:
-                print('Digite um número válido')
+    
+        # Validação de E-mail
+        while True:
+            novo_email_usuario = input('Digite seu novo e-mail:').strip().lower()
+
+            if len(novo_email_usuario) == 0:
+                print('E-mail inválido. Tente novamente!')
                 continue
 
-        usuario_encontrado = None
+                
+            email_duplicado = False
 
-        for usuario in usuarios:
-            if usuario['id'] == usuario_digitado:
-                usuario_encontrado = usuario
-                break
+
+            for usuario in usuarios:
+                if usuario['email'] == novo_email_usuario and usuario['id'] != usuario_encontrado['id']:
+                    email_duplicado = True
+                    break
                 
 
-        if usuario_encontrado:
-            usuarios.remove(usuario_encontrado)
-            print('Usuário removido com sucesso!') 
+            if email_duplicado:
+                print('E-mail já cadastrado!')
+            else:
+                break
 
-            salvar_usuarios(usuarios)
+        # Atualização dos dados
+        usuario_encontrado['nome'] = novo_nome_usuario
+        usuario_encontrado['email'] = novo_email_usuario
+
+        print('Usuário atualizado com sucesso!')
+        salvar_usuarios(usuarios)
+        
+    else:
+        print('Usuário não encontrado!')
+
+
+
+# Função para deletar usuário - Opção 4
+def deletar_usuario(usuarios):
+    while True:
+        try:
+            usuario_digitado = int(input('Digite o id do usuário: '))
+            break
+        except ValueError:
+            print('Digite um número válido')
             
-        else:
-            print('Usuário não encontrado')
-        
-        
 
-        
+    usuario_encontrado = None
 
-    elif opcao == '5':
+    for usuario in usuarios:
+        if usuario['id'] == usuario_digitado:
+            usuario_encontrado = usuario
+            break
+                
+
+    if usuario_encontrado:
+        usuarios.remove(usuario_encontrado)
+        print('Usuário removido com sucesso!') 
+
+        salvar_usuarios(usuarios)
+            
+    else:
+        print('Usuário não encontrado')
+
+
+    
+# Menu do Sistema de Cadastro de Usuários
+while True:
+
+    print('1 - Cadastrar usuário')
+    print('2 - Listar usuário')
+    print('3 - Atualizar Usuário')
+    print('4 - Deletar Usuário')
+    print('0 - Sair')
+
+    
+    opcao = input('Digite uma opção: ')
+
+   
+    if opcao == '1':
+        usuario_id = cadastrar_usuario(usuarios, usuario_id)
+
+    elif opcao == '2':
+        listar_usuarios(usuarios)
+
+    elif opcao == '3':
+        atualizar_usuarios(usuarios)
+
+    elif opcao == '4':
+        deletar_usuario(usuarios)
+
+    elif opcao == '0':
         print('Saindo...')
         break
 
