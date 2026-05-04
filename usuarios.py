@@ -1,5 +1,6 @@
 from storage import salvar_usuarios
 
+
 def cadastrar_usuarios(usuarios, usuario_id):
     while True:
         nome = input('Digite seu usuário: ').strip()
@@ -46,6 +47,7 @@ def cadastrar_usuarios(usuarios, usuario_id):
 
 
 
+
 def listar_usuarios(usuarios):
     if not usuarios:
         print('Sem usuários cadastrados')
@@ -55,7 +57,33 @@ def listar_usuarios(usuarios):
 
     for usuario in usuarios:
         print(f'id: {usuario["id"]} | nome: {usuario["nome"]} | email: {usuario["email"]}')
-              
+
+
+
+
+def buscar_usuario_por_id(usuarios):
+    try:
+        usuario_digitado = int(input('Digite o ID do usuário: '))
+    except ValueError:
+        print('Digite um número válido')
+        return
+    
+    usuario_encontrado = None
+
+    for usuario in usuarios:
+        if usuario['id'] == id_digitado:
+            id_encontrado = usuario
+            break
+
+    if usuario_encontrado is None:
+        print('Usuário não encontrado')
+    else:
+        print('\n--- USUÁRIO ENCONTRADO ---\n')
+        print(f"ID: {id_encontrado['id']}")
+        print(f"Nome: {id_encontrado['nome']}")
+        print(f"Email: {id_encontrado['email']}")
+
+
 
 
 def atualizar_usuarios(usuarios):

@@ -3,7 +3,8 @@ from usuarios import (
     cadastrar_usuarios,
     listar_usuarios,
     atualizar_usuarios,
-    deletar_usuario
+    deletar_usuario,
+    buscar_usuario_por_id
 )
 
 
@@ -24,13 +25,14 @@ while True:
     print('[2] - Listar usuários')
     print('[3] - Atualizar usuário')
     print('[4] - Deletar usuário')
+    print('[5] - Buscar usuário por ID')
     print('[0] - Sair\n')
 
 
     try:
         opcao = int(input('Digite uma opção: '))
     except ValueError:
-        print('Digite um número válido')
+        print('Digite um número válido!')
         continue
 
 
@@ -46,6 +48,9 @@ while True:
     
     elif opcao == 4:
         deletar_usuario(usuarios)
+
+    elif opcao == 5:
+        buscar_usuario_por_id(usuarios)
     
     elif opcao == 0:
         print('Saindo...')
